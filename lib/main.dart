@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:inheritrd_counter_notifier/counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,56 +18,64 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const ThemePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
 
-  final String title;
+class ThemePage extends StatefulWidget {
+  const ThemePage({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<ThemePage> createState() => _ThemePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+class _ThemePageState extends State<ThemePage> {
+  ThemeColor themeColor= ThemeColor(color: Colors.green);
+  final Random random = Random();
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
+        title: Text('Inherited Widget demo'),
+      ),
+      body: ThemeColorWidget(
+        themeColor: themeColor,
+      child: Builder(
+        builder: (context) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 150,
+                  width: 150,
+                  color: ThemeColorWidget.of(context)!.themeColor.color,
+                ),
+                ElevatedButton(onPressed: (){
+                  setState(() {
+                    themeColor = ThemeColor(color: Color.fromRGBO(
+                      random.nextInt(255),
+                      random.nextInt(255),
+                      random.nextInt(255),
+                      1,
+                    ),);
+                  });
 
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+                }, child: const Text('Toggle color'))
+              ],
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+          );
+        },
+
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
     );
   }
 }
+
+
+
