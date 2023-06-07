@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:inheritrd_counter_notifier/counter.dart';
+import 'package:inheritrd_counter_notifier/inherited.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,7 +32,7 @@ class ThemePage extends StatefulWidget {
 }
 
 class _ThemePageState extends State<ThemePage> {
-  ThemeColor themeColor= ThemeColor(color: Colors.green);
+ThemeColorNotifier themeColorNotifier= ThemeColorNotifier();
   final Random random = Random();
 
   @override
@@ -41,8 +41,8 @@ class _ThemePageState extends State<ThemePage> {
       appBar: AppBar(
         title: Text('Inherited Widget demo'),
       ),
-      body: ThemeColorWidget(
-        themeColor: themeColor,
+      body: ThemeColorInheritedNotifier(
+        themeColorNotifier: themeColorNotifier,
       child: Builder(
         builder: (context) {
           return Center(
@@ -53,17 +53,15 @@ class _ThemePageState extends State<ThemePage> {
                 Container(
                   height: 150,
                   width: 150,
-                  color: ThemeColorWidget.of(context)!.themeColor.color,
+                  color: ThemeColorInheritedNotifier.of(context)!.color,
                 ),
                 ElevatedButton(onPressed: (){
-                  setState(() {
-                    themeColor = ThemeColor(color: Color.fromRGBO(
-                      random.nextInt(255),
-                      random.nextInt(255),
-                      random.nextInt(255),
-                      1,
-                    ),);
-                  });
+                  themeColorNotifier.toggleColor(Color.fromRGBO(
+                    random.nextInt(255),
+                    random.nextInt(255),
+                    random.nextInt(255),
+                    1,
+                  ),);
 
                 }, child: const Text('Toggle color'))
               ],
